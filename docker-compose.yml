@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  leetcode:
+    image: php:7.4
+    container_name: leetcode
+    tty: true
+    volumes:
+      - ~/www:/var/www:cached
+
