@@ -20,54 +20,57 @@ class Solution {
         if (strlen($s) == 0) {
             return true;
         }
-        $result = true;
+
         for ($i = 0; $i < strlen($s); $i++) {
+            switch ($s[$i]) {
+                case ")":
+                case "}":
+                case "]":
+                    if ($i == 0) {
+                        return false;
+                    }
+                    if (!$this->check($s, $i)) {
+                        return false;
+                    }
+                    $i = 0;
+            }
+        }
+        if (preg_match("/^X*$/", $s)) {
+            return true;
+        }
+        return false;
+    }
+
+    function check(&$s, $n) {
+        $bracket = $s[$n];
+        for ($i = $n - 1; $i >= 0; $i--) {
             if ($s[$i] == "X") {
                 continue;
             }
-            $result = $this->search($s, $i, $s[$i]);
-            if ($result == false) {
-                return false;
-            }
-            $s[$i] = "X";
-        }
-        echo $s . "\n";
-        return $result;
-    }
-
-    function search(&$s, $n, $bracket) {
-        echo $s[$n];
-        for ($i = $n; $i < strlen($s); $i++) {
-            switch ($s[$i]) {
-                case "X":
-                case "(":
-                case "{":
-                case "[":
-                    $result = $this->search($s, $i + 1, $s[$i]);
-                    if ($result == false) {
-                        return false;
-                    }
-                    $s[$i] = "X";
-                    return true;
+            switch ($bracket) {
                 case ")":
-                    if ($bracket == "(") {
+                    if ($s[$i] == "(") {
                         $s[$i] = "X";
+                        $s[$n] = "X";
                         return true;
                     }
                     return false;
                 case "}":
-                    if ($bracket == "{") {
+                    if ($s[$i] == "{") {
                         $s[$i] = "X";
+                        $s[$n] = "X";
                         return true;
                     }
                     return false;
                 case "]":
-                    if ($bracket == "[") {
+                    if ($s[$i] == "[") {
                         $s[$i] = "X";
+                        $s[$n] = "X";
                         return true;
                     }
                     return false;
             }
         }
+        return false;
     }
 }
